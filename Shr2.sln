@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2043
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shr2", "Shr2\Shr2.csproj", "{B8CEC168-6A2B-42CA-A2F8-060A3E776C48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shr2.Interfaces", "Shr2.Interfaces\Shr2.Interfaces.csproj", "{374AF374-2F3A-4978-A9BE-CCB046F74FCE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B8CEC168-6A2B-42CA-A2F8-060A3E776C48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8CEC168-6A2B-42CA-A2F8-060A3E776C48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8CEC168-6A2B-42CA-A2F8-060A3E776C48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8CEC168-6A2B-42CA-A2F8-060A3E776C48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{374AF374-2F3A-4978-A9BE-CCB046F74FCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{374AF374-2F3A-4978-A9BE-CCB046F74FCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{374AF374-2F3A-4978-A9BE-CCB046F74FCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{374AF374-2F3A-4978-A9BE-CCB046F74FCE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3E6F6B28-3B66-4915-90F1-B8EAAB1CC10B}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,5 @@
+﻿{
+  "StorageConnectionString": "DefaultEndpointsProtocol=https;AccountName=youraccountname;AccountKey=somelongfancyaccountkey==;EndpointSuffix=core.windows.net",
+  "StorageProvider": "AzTableStorage",
+  "Domain": "https://shr2.azurewebsites.net/"
+}
