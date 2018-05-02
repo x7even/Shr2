@@ -12,5 +12,9 @@ namespace Shr2.Models
         public string StorageProvider { get; set; }
 
         public string Domain { get; set; }
+
+        public bool EncodeWithPermissionKey { get; set; }
+
+        public string[] PermissionKeys { get; set; }
     }
 }

@@ -1,5 +1,11 @@
 ﻿{
   "StorageConnectionString": "DefaultEndpointsProtocol=https;AccountName=youraccountname;AccountKey=somelongfancyaccountkey==;EndpointSuffix=core.windows.net",
   "StorageProvider": "AzTableStorage",
-  "Domain": "https://shr2.azurewebsites.net/"
+  "Domain": "https://shr2.azurewebsites.net/",
+  "EncodeWithPermissionKey": false,
+  "PermissionKeys": [
+    "replaceme123",
+    "replaceme1234",
+    "addremove keys in this json[] however many you like"
+  ]
 }

@@ -15,12 +15,13 @@ namespace Shr2.Controllers
     public class V1Controller : Controller
     {
         private readonly IConverter _transposer;
-        private readonly IConfig _config;
+        private readonly Config config;
 
-        public V1Controller(IConverter transposer, IConfig config)
+        public V1Controller(IConverter transposer, IConfig iconfig)
         {
             _transposer = transposer;
-            _config = config;
+            config = iconfig.GetConfig();
+
             
         }
 
@@ -32,7 +33,7 @@ namespace Shr2.Controllers
             var result = await _transposer.TryEncodeUrl("http://www.google.com");
             if (!String.IsNullOrEmpty(result))
             {
-                return Json(_config.GetConfig().Domain + result);
+                return Json(config.Domain + result);
             }
             else if (result == "error")
             {
@@ -57,12 +58,16 @@ namespace Shr2.Controllers
             if (!ModelState.IsValid)
                 return new BadRequestResult();
 
+            if(config.EncodeWithPermissionKey && !config.PermissionKeys.Contains(key.Trim()))
+                    return new UnauthorizedResult();
+
+
             var result = await _transposer.TryEncodeUrl(request.LongUrl);
             if (!String.IsNullOrEmpty(result))
             {
                 return Json(new {
                     kind = "urlshortener#url",
-                    id = (_config.GetConfig().Domain + result),
+                    id = (config.Domain + result),
                     longUrl = request.LongUrl });
             }
             else if (result == "error")
