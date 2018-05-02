@@ -12,4 +12,6 @@ Solution is actually ready to use as replacement for most previous implementatio
  "longUrl": "https://github.com/x7even/Shr2"
 }
 
-Interfaces for all services & providers can easiliy be exteneded to support other data storage sources or other charset (current char set is base62 AZaz09)
+Interfaces for all services & providers injected can easiliy be extended to support other data storage sources or other charset, stats, auth etc (current char set is base62 AZaz09)
+
+# Contributions Welcome
