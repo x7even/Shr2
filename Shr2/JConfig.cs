@@ -1,7 +1,9 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
+using Microsoft.Extensions.Logging;
 using Shr2.Models;
 using Shr2.Interfaces;
 
@@ -9,10 +11,13 @@ namespace Shr2
 {
     public class JConfig : IConfig
     {
-        private static Config config;
-        //private static _loaded()
+        private static Config? config;
+        private readonly ILogger<JConfig>? _logger;
 
-        public JConfig() { }
+        public JConfig(ILogger<JConfig>? logger = null)
+        {
+            _logger = logger;
+        }
 
         public Config GetConfig()
         {
@@ -24,11 +29,27 @@ namespace Shr2
 
         public Config GetConfig(string path)
         {
-            var jresult = new JsonFileReader<Config>().ReadJsonFile(path);
-            if (jresult == null)
-                throw new FormatException("Unable to read expected json config model in [" + path + "]");
-            else
+            try
+            {
+                var jresult = new JsonFileReader<Config>().ReadJsonFile(path);
+                if (jresult == null)
+                {
+                    _logger?.LogError("Unable to read expected json config model in [{Path}]", path);
+                    throw new FormatException($"Unable to read expected json config model in [{path}]");
+                }
+                
                 return config = jresult;
+            }
+            catch (FileNotFoundException ex)
+            {
+                _logger?.LogError(ex, "Configuration file not found: {Path}", path);
+                throw new FileNotFoundException($"Configuration file not found: {path}", ex);
+            }
+            catch (Exception ex) when (ex is not FormatException)
+            {
+                _logger?.LogError(ex, "Error reading configuration file: {Path}", path);
+                throw;
+            }
         }
     }
 }

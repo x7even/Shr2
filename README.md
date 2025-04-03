@@ -1,17 +1,129 @@
 # Shr2
-Shr2 is a url shortening api, techstack is C# .net core 2.x, makes use of AzureTables for url index storage.
 
-Solution is actually ready to use as replacement for most previous implementations of google url shortener.
+Shr2 is a URL shortening API built with .NET 9, designed to be cross-platform and run on both Windows and Linux. It uses Azure Table Storage for URL index storage and provides a Google URL Shortener-compatible API.
 
-- Accept longurl json param for input
-- output json of similar format 
+## Features
+
+- RESTful API for URL shortening
+- Google URL Shortener-compatible API format
+- Cross-platform support (Windows/Linux)
+- Docker containerization
+- Memory caching for improved performance
+- Comprehensive logging
+- Health checks
+- Swagger API documentation
+
+## API Usage
+
+### Shorten a URL
+
+```http
+POST /api/v1/url
+Content-Type: application/json
 
 {
- "kind": "urlshortener#url",
- "id": "https://your.domain/fbsS",
- "longUrl": "https://github.com/x7even/Shr2"
+  "longUrl": "https://github.com/x7even/Shr2"
 }
+```
 
-Interfaces for all services & providers injected can easiliy be extended to support other data storage sources or other charset, stats, auth etc (current char set is base62 AZaz09)
+Response:
 
-# Contributions Welcome
+```json
+{
+  "kind": "urlshortener#url",
+  "id": "https://your.domain/fbsS",
+  "longUrl": "https://github.com/x7even/Shr2"
+}
+```
+
+### Access a shortened URL
+
+Simply navigate to the shortened URL:
+
+```
+https://your.domain/fbsS
+```
+
+## Running the Application
+
+### Prerequisites
+
+- .NET 9 SDK
+- Docker (optional, for containerized deployment)
+
+### Configuration
+
+Edit the `shr2.config.json` file to configure your application:
+
+```json
+{
+  "StorageConnectionString": "Your Azure Storage connection string",
+  "StorageProvider": "AzTableStorage",
+  "Domain": "https://your.domain/",
+  "EncodeWithPermissionKey": false,
+  "PermissionKeys": []
+}
+```
+
+### Running Locally
+
+```bash
+# Clone the repository
+git clone https://github.com/x7even/Shr2.git
+cd Shr2
+
+# Restore dependencies
+dotnet restore
+
+# Build the project
+dotnet build
+
+# Run the application
+dotnet run --project Shr2/Shr2.csproj
+```
+
+### Using Docker
+
+```bash
+# Build and run with Docker Compose
+docker-compose up -d
+
+# Or build and run the Docker image directly
+docker build -t shr2 .
+docker run -p 5000:80 -p 5001:443 shr2
+```
+
+### Using Azurite for Local Development
+
+The Docker Compose configuration includes Azurite, an Azure Storage emulator, for local development:
+
+```bash
+# Start the services
+docker-compose up -d
+
+# Configure your application to use Azurite
+# Connection string: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;TableEndpoint=http://azurite:10002/devstoreaccount1;
+```
+
+## Architecture
+
+Shr2 follows a clean architecture with dependency injection:
+
+- **Controllers**: Handle HTTP requests and responses
+- **Services**: Implement business logic
+- **Providers**: Handle data storage and retrieval
+- **Models**: Define data structures
+- **Interfaces**: Define contracts between components
+
+## Cross-Platform Compatibility
+
+Shr2 is designed to run on both Windows and Linux environments:
+
+- Uses cross-platform Azure.Data.Tables SDK
+- Implements path normalization for file operations
+- Containerized with Docker for consistent deployment
+- CI/CD pipeline with GitHub Actions
+
+## Contributions Welcome
+
+Contributions are welcome! Please feel free to submit a Pull Request.
