@@ -126,6 +126,34 @@ Shr2 is designed to run on both Windows and Linux environments:
 - Containerized with Docker for consistent deployment
 - CI/CD pipeline with GitHub Actions
 
+## Continuous Integration & Deployment
+
+The project includes GitHub Actions workflows for automated builds and releases:
+
+### Build and Test Workflow
+
+Triggered on every push to main and pull requests:
+- Builds the application
+- Runs all tests
+- Validates Docker build
+
+### Release Workflow
+
+Triggered when a new release is published:
+- Builds the application in Release configuration
+- Creates and uploads build artifacts
+- Builds a Docker image with version tags
+- Attaches build artifacts to the GitHub Release
+- Optionally pushes Docker image to a container registry (commented by default)
+
+To create a new release:
+1. Go to the GitHub repository
+2. Click on "Releases" in the sidebar
+3. Click "Create a new release"
+4. Enter a tag version (e.g., v1.0.0)
+5. Add release notes
+6. Click "Publish release"
+
 ## Security Features
 
 ### Rate Limiting
