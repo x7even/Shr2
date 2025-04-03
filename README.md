@@ -10,8 +10,10 @@ Shr2 is a URL shortening API built with .NET 9, designed to be cross-platform an
 - Docker containerization
 - Memory caching for improved performance
 - Comprehensive logging
-- Health checks
+- Health checks with Azure Storage monitoring
+- API rate limiting for security
 - Swagger API documentation
+- Improved error handling
 
 ## API Usage
 
@@ -123,6 +125,64 @@ Shr2 is designed to run on both Windows and Linux environments:
 - Implements path normalization for file operations
 - Containerized with Docker for consistent deployment
 - CI/CD pipeline with GitHub Actions
+
+## Security Features
+
+### Rate Limiting
+
+The API includes rate limiting to protect against abuse:
+
+- Limits requests to 100 per minute per IP address
+- Returns HTTP 429 (Too Many Requests) when limit is exceeded
+- Configurable limits in Program.cs
+
+### API Key Authentication
+
+Optional API key authentication for URL shortening:
+
+- Enable by setting `EncodeWithPermissionKey` to `true` in config
+- Add allowed keys to the `PermissionKeys` array
+- Pass the key as a query parameter: `/api/v1/url?key=your-api-key`
+
+## Monitoring and Reliability
+
+### Health Checks
+
+The application includes health checks to monitor system status:
+
+- Azure Storage connectivity check
+- Accessible at `/health` endpoint
+- Returns HTTP 200 when all systems are operational
+- Returns HTTP 503 when any dependency is unavailable
+
+### Logging
+
+Comprehensive structured logging throughout the application:
+
+- Request/response logging
+- Error tracking with exception details
+- Performance metrics
+- Security events (authentication failures, rate limit hits)
+- Configurable log levels
+
+## Performance Optimizations
+
+### Memory Caching
+
+The application uses in-memory caching to improve performance:
+
+- URL lookup results are cached to reduce database queries
+- Configurable cache expiration (sliding and absolute)
+- Automatic cache invalidation for modified data
+
+### Async Processing
+
+All operations use proper async/await patterns:
+
+- Non-blocking I/O operations
+- Efficient thread utilization
+- Improved scalability under load
+- Background processing for non-critical operations
 
 ## Contributions Welcome
 
