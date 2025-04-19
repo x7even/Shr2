@@ -20,7 +20,7 @@ namespace Shr2.Controllers
         private readonly ILogger<V1Controller>? _logger;
 
         public V1Controller(
-            IConverter converter, 
+            IConverter converter,
             IConfig configProvider,
             ILogger<V1Controller>? logger = null)
         {
@@ -45,7 +45,7 @@ namespace Shr2.Controllers
             {
                 _logger?.LogInformation("Test endpoint called");
                 var result = await _converter.TryEncodeUrl("http://www.google.com");
-                
+
                 if (!string.IsNullOrEmpty(result) && result != "error")
                 {
                     var shortUrl = _config.Domain + result;
@@ -55,7 +55,7 @@ namespace Shr2.Controllers
                 else if (result == "error")
                 {
                     _logger?.LogError("Error processing test URL");
-                    return StatusCode(StatusCodes.Status500InternalServerError, 
+                    return StatusCode(StatusCodes.Status500InternalServerError,
                         new { error = "URL could not be processed, try again later." });
                 }
                 else
@@ -67,7 +67,7 @@ namespace Shr2.Controllers
             catch (Exception ex)
             {
                 _logger?.LogError(ex, "Exception in Test endpoint");
-                return StatusCode(StatusCodes.Status500InternalServerError, 
+                return StatusCode(StatusCodes.Status500InternalServerError,
                     new { error = "An unexpected error occurred" });
             }
         }
@@ -85,12 +85,12 @@ namespace Shr2.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Url([FromBody] GStyleRequest request, [FromQuery] string key = "")
+        public new async Task<IActionResult> Url([FromBody] GStyleRequest request, [FromQuery] string key = "")
         {
             try
             {
                 _logger?.LogInformation("URL shortening requested for: {LongUrl}", request.LongUrl);
-                
+
                 if (!ModelState.IsValid)
                 {
                     _logger?.LogWarning("Invalid model state for URL request");
@@ -104,7 +104,7 @@ namespace Shr2.Controllers
                 }
 
                 var result = await _converter.TryEncodeUrl(request.LongUrl);
-                
+
                 if (!string.IsNullOrEmpty(result) && result != "error")
                 {
                     var response = new
@@ -113,14 +113,14 @@ namespace Shr2.Controllers
                         id = (_config.Domain + result),
                         longUrl = request.LongUrl
                     };
-                    
+
                     _logger?.LogInformation("URL shortened successfully: {ShortUrl}", response.id);
                     return Ok(response);
                 }
                 else if (result == "error")
                 {
                     _logger?.LogError("Error processing URL: {LongUrl}", request.LongUrl);
-                    return StatusCode(StatusCodes.Status500InternalServerError, 
+                    return StatusCode(StatusCodes.Status500InternalServerError,
                         new { error = "URL could not be processed, try again later." });
                 }
                 else
@@ -132,7 +132,7 @@ namespace Shr2.Controllers
             catch (Exception ex)
             {
                 _logger?.LogError(ex, "Exception in Url endpoint for: {LongUrl}", request.LongUrl);
-                return StatusCode(StatusCodes.Status500InternalServerError, 
+                return StatusCode(StatusCodes.Status500InternalServerError,
                     new { error = "An unexpected error occurred" });
             }
         }

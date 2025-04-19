@@ -86,25 +86,62 @@ dotnet run --project Shr2/Shr2.csproj
 
 ### Using Docker
 
+Prerequisites:
+- Docker Desktop must be installed and running
+
+#### Option 1: Using Docker Compose (Recommended)
+
+The easiest way to run Shr2 is with Docker Compose, which sets up both the application and Azurite (Azure Storage emulator) for local development:
+
 ```bash
 # Build and run with Docker Compose
-docker-compose up -d
-
-# Or build and run the Docker image directly
-docker build -t shr2 .
-docker run -p 5000:80 -p 5001:443 shr2
+docker compose up -d --build
 ```
+
+This will:
+- Build the Shr2 application container
+- Start an Azurite container for local Azure Storage emulation
+- Configure the application to use Azurite automatically
+- Expose the application on ports 5000 (HTTP) and 5001 (HTTPS)
+
+Note: We use the modern `docker compose` command (without hyphen) which is now the recommended approach.
+
+#### Option 2: Using Docker Directly
+
+You can also build and run the Docker image directly:
+
+```bash
+# Build the Docker image
+docker build -t shr2 .
+
+# Run the container with environment variables
+docker run -p 5000:80 -p 5001:443 \
+  -e SHR2_STORAGE_CONNECTION_STRING="Your Azure Storage connection string" \
+  -e SHR2_DOMAIN="https://your.domain/" \
+  shr2
+```
+
+### Configuration with Environment Variables
+
+Shr2 can be configured using environment variables, which is the recommended approach for Docker deployments:
+
+| Environment Variable | Description | Default |
+|----------------------|-------------|--------|
+| `SHR2_STORAGE_CONNECTION_STRING` | Azure Storage connection string | From config file |
+| `SHR2_STORAGE_PROVIDER` | Storage provider to use | AzTableStorage |
+| `SHR2_DOMAIN` | Domain for shortened URLs | From config file |
+| `SHR2_ENCODE_WITH_PERMISSION_KEY` | Whether to require API keys | false |
+| `SHR2_PERMISSION_KEYS` | Comma-separated list of API keys | From config file |
+| `SHR2_CONFIG_PATH` | Path to config file | shr2.config.json |
 
 ### Using Azurite for Local Development
 
-The Docker Compose configuration includes Azurite, an Azure Storage emulator, for local development:
+The Docker Compose configuration includes Azurite, an Azure Storage emulator, for local development. The connection is pre-configured in the docker-compose.yml file.
 
-```bash
-# Start the services
-docker-compose up -d
+If you need to connect to Azurite manually, use this connection string:
 
-# Configure your application to use Azurite
-# Connection string: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;TableEndpoint=http://azurite:10002/devstoreaccount1;
+```
+DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;TableEndpoint=http://azurite:10002/devstoreaccount1;
 ```
 
 ## Architecture

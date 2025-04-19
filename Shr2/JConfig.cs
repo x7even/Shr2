@@ -23,8 +23,12 @@ namespace Shr2
         {
             if (config != null)
                 return config;
-            else
-                return GetConfig("shr2.config.json");
+
+            // Check for environment variable with config path
+            string configPath = Environment.GetEnvironmentVariable("SHR2_CONFIG_PATH") ?? "shr2.config.json";
+            _logger?.LogInformation("Loading configuration from {ConfigPath}", configPath);
+
+            return GetConfig(configPath);
         }
 
         public Config GetConfig(string path)
@@ -37,7 +41,7 @@ namespace Shr2
                     _logger?.LogError("Unable to read expected json config model in [{Path}]", path);
                     throw new FormatException($"Unable to read expected json config model in [{path}]");
                 }
-                
+
                 return config = jresult;
             }
             catch (FileNotFoundException ex)
