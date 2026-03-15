@@ -35,7 +35,7 @@ namespace Shr2
             services.AddScoped<IConverter, ConverterService>();
             services.AddScoped<IStorageProvider, AzTableStorage>();
 
-            services.AddTransient<IHostedService, Initializer>();
+            services.AddHostedService<Initializer>();
 
             services.AddControllers();
             services.AddEndpointsApiExplorer();
