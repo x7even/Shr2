@@ -47,7 +47,7 @@ namespace Shr2.Providers
             return true;
         }
 
-        public async Task<string> TryAddNewUrlAsync(string url, bool permanent = false, bool preserve = true, bool statsCount = false)
+        public async Task<EncodeResult> TryAddNewUrlAsync(string url, bool permanent = false, bool preserve = true, bool statsCount = false)
         {
             var id = GetNext();
             var entity = new ShorterData
@@ -64,7 +64,7 @@ namespace Shr2.Providers
             try
             {
                 await _tableClient.AddEntityAsync(entity);
-                
+
                 // Update index in background
                 _ = Task.Run(async () =>
                 {
@@ -73,8 +73,8 @@ namespace Shr2.Providers
                         await UpsertEntityAsync(new IndexEntity(entity.PartitionKey, "index", indexValue));
                     }
                 });
-                
-                return entity.PartitionKey + entity.RowKey;
+
+                return EncodeResult.Ok(entity.PartitionKey + entity.RowKey);
             }
             catch (RequestFailedException ex) when (ex.Status == 409) // Conflict
             {
@@ -85,13 +85,13 @@ namespace Shr2.Providers
                 }
                 else
                 {
-                    return string.Empty;
+                    return EncodeResult.Fail(EncodeError.Conflict);
                 }
             }
             catch (Exception ex)
             {
                 _logger?.LogError(ex, "Error adding URL: {Url}", url);
-                return "error";
+                return EncodeResult.Fail(EncodeError.StorageError);
             }
         }
 

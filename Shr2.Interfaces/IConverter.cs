@@ -8,9 +8,7 @@ namespace Shr2.Interfaces
     public interface IConverter
     {
 
-        Task<string> TryEncodeUrl(string url);
-
-        //bool TryEncodeUrl(string url, out string idcode);
+        Task<EncodeResult> TryEncodeUrl(string url);
 
         Task<(string url, bool permanent, bool preserveMethod)> TryDecode(string shortcode);
     }
