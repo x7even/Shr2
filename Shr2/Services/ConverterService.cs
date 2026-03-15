@@ -68,25 +68,25 @@ namespace Shr2.Services
         /// </summary>
         /// <param name="shortcode">The short code to decode</param>
         /// <returns>Tuple containing the URL, permanent flag, and preserveMethod flag</returns>
-        public async Task<(string, bool, bool)> TryDecode(string shortcode)
+        public async Task<(string Url, bool Permanent, bool PreserveMethod)> TryDecode(string shortcode)
         {
             _logger?.LogInformation("Decoding shortcode: {ShortCode}", shortcode);
-            
+
             // Try to get from cache first
             var cacheKey = $"url_{shortcode}";
-            if (_cache.TryGetValue(cacheKey, out (string url, bool permanent, bool preserveMethod) result))
+            if (_cache.TryGetValue(cacheKey, out (string Url, bool Permanent, bool PreserveMethod) result))
             {
                 _logger?.LogInformation("Cache hit for shortcode: {ShortCode}", shortcode);
                 return result;
             }
-            
+
             try
             {
                 var storagekey = Decode(shortcode);
                 result = await _storageProvider.TryGetUrlAsync(storagekey);
-                
+
                 // Cache the result if URL was found
-                if (!string.IsNullOrEmpty(result.Item1))
+                if (!string.IsNullOrEmpty(result.Url))
                 {
                     var cacheOptions = new MemoryCacheEntryOptions()
                         .SetSlidingExpiration(TimeSpan.FromMinutes(10))

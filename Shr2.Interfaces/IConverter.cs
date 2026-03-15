@@ -12,6 +12,6 @@ namespace Shr2.Interfaces
 
         //bool TryEncodeUrl(string url, out string idcode);
 
-        Task<(string url, bool permanent, bool preserveMethod)> TryDecode(string shortcode);
+        Task<(string Url, bool Permanent, bool PreserveMethod)> TryDecode(string shortcode);
     }
 }
