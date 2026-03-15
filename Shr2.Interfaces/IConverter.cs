@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Shr2.Interfaces
+﻿namespace Shr2.Interfaces
 {
     public interface IConverter
     {

@@ -1,8 +1,4 @@
-﻿﻿﻿using System;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Concurrent;
 using Azure;
 using Azure.Data.Tables;
 using Microsoft.Extensions.Logging;
