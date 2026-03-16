@@ -104,7 +104,7 @@ namespace Shr2.Providers
             return (rownum.ToString(), tablekey);
         }
 
-        public async Task<(string url, bool permanent, bool preserveMethod)> TryGetUrlAsync(string idcode)
+        public async Task<(string Url, bool Permanent, bool PreserveMethod)> TryGetUrlAsync(string idcode)
         {
             if (idcode.Length >= 3 && Int64.TryParse(idcode, out long _))
             {

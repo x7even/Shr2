@@ -48,16 +48,16 @@ namespace Shr2.Controllers
 
                 var result = await _converter.TryDecode(id);
                 
-                if (string.IsNullOrEmpty(result.Item1))
+                if (string.IsNullOrEmpty(result.Url))
                 {
                     _logger?.LogWarning("No URL found for ID: {Id}", id);
                     return NotFound();
                 }
-                
-                _logger?.LogInformation("Redirecting {Id} to {Url} (Permanent: {Permanent}, PreserveMethod: {PreserveMethod})", 
-                    id, result.Item1, result.Item2, result.Item3);
-                
-                return new RedirectResult(result.Item1, result.Item2, result.Item3);
+
+                _logger?.LogInformation("Redirecting {Id} to {Url} (Permanent: {Permanent}, PreserveMethod: {PreserveMethod})",
+                    id, result.Url, result.Permanent, result.PreserveMethod);
+
+                return new RedirectResult(result.Url, result.Permanent, result.PreserveMethod);
             }
             catch (Exception ex)
             {

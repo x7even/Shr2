@@ -6,6 +6,6 @@
 
         Task<string> TryAddNewUrlAsync(string url, bool permanent = false, bool preserve = true, bool statsCount = false);
 
-        Task<(string url, bool permanent, bool preserveMethod)> TryGetUrlAsync(string idcode);
+        Task<(string Url, bool Permanent, bool PreserveMethod)> TryGetUrlAsync(string idcode);
     }
 }
