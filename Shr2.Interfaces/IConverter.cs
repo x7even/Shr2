@@ -3,9 +3,7 @@
     public interface IConverter
     {
 
-        Task<string> TryEncodeUrl(string url);
-
-        //bool TryEncodeUrl(string url, out string idcode);
+        Task<EncodeResult> TryEncodeUrl(string url);
 
         Task<(string Url, bool Permanent, bool PreserveMethod)> TryDecode(string shortcode);
     }

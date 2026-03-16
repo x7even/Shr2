@@ -42,22 +42,17 @@ namespace Shr2.Controllers
                 _logger?.LogInformation("Test endpoint called");
                 var result = await _converter.TryEncodeUrl("http://www.google.com");
 
-                if (!string.IsNullOrEmpty(result) && result != "error")
+                if (result.Success)
                 {
-                    var shortUrl = _config.Domain + result;
+                    var shortUrl = _config.Domain + result.ShortCode;
                     _logger?.LogInformation("Test URL shortened: {ShortUrl}", shortUrl);
                     return Ok(shortUrl);
                 }
-                else if (result == "error")
-                {
-                    _logger?.LogError("Error processing test URL");
-                    return StatusCode(StatusCodes.Status500InternalServerError,
-                        new { error = "URL could not be processed, try again later." });
-                }
                 else
                 {
-                    _logger?.LogWarning("Bad request for test URL");
-                    return BadRequest(new { error = "Invalid request" });
+                    _logger?.LogError("Error processing test URL: {Error}", result.Error);
+                    return StatusCode(StatusCodes.Status500InternalServerError,
+                        new { error = "URL could not be processed, try again later." });
                 }
             }
             catch (Exception ex)
@@ -101,28 +96,23 @@ namespace Shr2.Controllers
 
                 var result = await _converter.TryEncodeUrl(request.LongUrl);
 
-                if (!string.IsNullOrEmpty(result) && result != "error")
+                if (result.Success)
                 {
                     var response = new
                     {
                         kind = "urlshortener#url",
-                        id = (_config.Domain + result),
+                        id = (_config.Domain + result.ShortCode),
                         longUrl = request.LongUrl
                     };
 
                     _logger?.LogInformation("URL shortened successfully: {ShortUrl}", response.id);
                     return Ok(response);
                 }
-                else if (result == "error")
-                {
-                    _logger?.LogError("Error processing URL: {LongUrl}", request.LongUrl);
-                    return StatusCode(StatusCodes.Status500InternalServerError,
-                        new { error = "URL could not be processed, try again later." });
-                }
                 else
                 {
-                    _logger?.LogWarning("Bad request for URL: {LongUrl}", request.LongUrl);
-                    return BadRequest(new { error = "Invalid URL format" });
+                    _logger?.LogError("Error processing URL: {LongUrl}, Error: {Error}", request.LongUrl, result.Error);
+                    return StatusCode(StatusCodes.Status500InternalServerError,
+                        new { error = "URL could not be processed, try again later." });
                 }
             }
             catch (Exception ex)

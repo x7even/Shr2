@@ -30,25 +30,25 @@ namespace Shr2.Services
         /// Returns a 'shortened' idcode of a given stored url ready to be encoded.
         /// </summary>
         /// <param name="url">The URL to encode</param>
-        /// <returns>The encoded short URL identifier</returns>
-        public async Task<string> TryEncodeUrl(string url)
+        /// <returns>An EncodeResult indicating success with the short code, or failure with an error</returns>
+        public async Task<EncodeResult> TryEncodeUrl(string url)
         {
             _logger?.LogInformation("Encoding URL: {Url}", url);
-            
+
             try
             {
-                var storagekey = await _storageProvider.TryAddNewUrlAsync(url);
-                
-                if (!string.IsNullOrWhiteSpace(storagekey) && storagekey != "error")
+                var result = await _storageProvider.TryAddNewUrlAsync(url);
+
+                if (result.Success)
                 {
-                    var encoded = Encode(storagekey);
+                    var encoded = Encode(result.ShortCode!);
                     _logger?.LogInformation("URL encoded successfully: {ShortCode}", encoded);
-                    return encoded;
+                    return EncodeResult.Ok(encoded);
                 }
                 else
                 {
-                    _logger?.LogWarning("Failed to encode URL: {Url}", url);
-                    return storagekey;
+                    _logger?.LogWarning("Failed to encode URL: {Url}, Error: {Error}", url, result.Error);
+                    return result;
                 }
             }
             catch (Exception ex)
